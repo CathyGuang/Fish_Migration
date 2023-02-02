@@ -26,16 +26,16 @@ def initialize_grid_basic():
 
 
 def initialize_grid_coded(t):
-    grid=[[None for _ in range(7)] for _ in range(12)]
+    grid=[[None for _ in range(11)] for _ in range(8)]
     for i in range(len(grid)):
         for j in range(len(grid[0])):
-            temperature = datap.predictedtemp((i,j), t)
+            temperature = datap.predictedtemp((j,i), t)
             # print(temperature)
             if not math.isnan(temperature):
                 # temperature = None
-                grid[i][j] = Entry(100, temperature)
+                grid[7-i][j] = Entry(100, temperature)
             else: 
-                grid[i][j] = Entry(0, temperature)
+                grid[7-i][j] = Entry(0, temperature)
     print(grid)
     # grid = [[Entry(5,30),Entry(5,35),Entry(5,40),Entry(5,45),Entry(5,50)],
     # [Entry(5,35),Entry(5,40),Entry(5,45),Entry(5,50),Entry(5,55)],

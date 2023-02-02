@@ -13,7 +13,7 @@ phitemp.name = "phitemp"
 
 coordrange = []
 for i in range(-11, 1):
-    for j in range(55, 62):
+    for j in range(55, 63):
         coordrange.append((i,j))
         
 
