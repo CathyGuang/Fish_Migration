@@ -1,0 +1,33 @@
+# Ignore all
+*
+# Unignore all with extensions
+!*.*
+# Unignore all dirs
+!*/
+
+# Don't track content of these folders
+java_output/
+python_output/
+simulated_true_histories/
+simulated_inputs/
+simulated_result/
+simulated_data/
+partition/
+no_prevalence_simulation/
+.vscode/
+err_experiment/output/
+err_experiment/input/
+experiment/
+contree_data/
+err_experiment/
+uncover_true_experiment/
+stereodist/
+
+# Complied source #
+*.class
+*.pyc
+
+# Scripts
+commandList.txt
+
+.DS_Store
