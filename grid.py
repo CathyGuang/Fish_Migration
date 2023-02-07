@@ -130,12 +130,14 @@ def migration(grid):
                 V_max = 160
                 if best_direction == "u" or best_direction == "d":
                     if temp_diff <= 2:
+                        # 0.43125 = distance of one degree of latitude / V_max
                         velocity = 0.5 * temp_diff * 0.43125 * V_max
                         percentage = velocity / 69
                     else: 
                         percentage = 1
                 else:
                     if temp_diff <= 2:
+                        # 0.34375 = distance of one degree of longitude / V_max
                         velocity = 0.5 * temp_diff * 0.34375 * V_max
                         percentage = velocity / 55
                     else: 
