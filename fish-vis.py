@@ -24,10 +24,10 @@ cb = fig.colorbar(im)
 tick_locator = ticker.MaxNLocator(nbins = 5)
 cb.locator = tick_locator
 cb.update_ticks()
+i = 0
 
 def updatefig(*args):
     global i
-    i = 0
     if (i<100):
         i += 1
     else:
