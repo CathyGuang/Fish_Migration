@@ -6,7 +6,7 @@ class Entry:
     
     def __repr__(self):
         # out = '{' + str(self.fishNum) + '; ' + str(self.temp) + '}'
-        # out = str(self.temp)
+        # out = str(round(self.temp,2))
         out = str(self.fishNum)
         return out
 

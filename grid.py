@@ -14,41 +14,29 @@ Potential improvements:
 
 global_grid = []
 
-def initialize_grid_basic():
-    grid = []
-    for i in range(5):
-        grid.append([])
-        for j in range(5):
-            # A place to modify temp
-            newEntry = Entry(5,i+10)
-            grid[i].append(newEntry)
-    return grid
-
-
+'''Initialize grid with time = 1.'''
 def initialize_grid_coded(t):
     grid=[[None for _ in range(11)] for _ in range(8)]
     for i in range(len(grid)):
         for j in range(len(grid[0])):
             temperature = datap.predictedtemp((j,i), t)
-            # print(temperature)
             if not math.isnan(temperature):
-                # temperature = None
                 grid[7-i][j] = Entry(100, temperature)
             else: 
                 grid[7-i][j] = Entry(0, temperature)
-    print(grid)
-    # grid = [[Entry(5,30),Entry(5,35),Entry(5,40),Entry(5,45),Entry(5,50)],
-    # [Entry(5,35),Entry(5,40),Entry(5,45),Entry(5,50),Entry(5,55)],
-    # [Entry(5,40),Entry(5,45),Entry(5,50),Entry(5,55),Entry(5,60)],
-    # [Entry(5,45),Entry(5,50),Entry(5,55),Entry(5,60),Entry(5,65)],
-    # [Entry(5,50),Entry(5,55),Entry(5,60),Entry(5,65),Entry(5,70)]]
-    # grid = [[Entry(5,30),Entry(0,35),Entry(0,40),Entry(0,45),Entry(0,50)],
-    # [Entry(0,35),Entry(0,40),Entry(0,45),Entry(0,50),Entry(0,55)],
-    # [Entry(0,40),Entry(0,45),Entry(0,50),Entry(0,55),Entry(0,60)],
-    # [Entry(0,45),Entry(0,50),Entry(0,55),Entry(0,60),Entry(0,65)],
-    # [Entry(0,50),Entry(0,55),Entry(0,60),Entry(0,65),Entry(0,70)]]
-    
     return grid 
+
+'''This function updates temperatures in the grid given a time t.'''
+def update_temperature(old_grid,t):
+    grid=[[None for _ in range(11)] for _ in range(8)]
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            temperature = datap.predictedtemp((j,i), t)
+            if not math.isnan(temperature):
+                grid[7-i][j] = Entry(old_grid[7-i][j].get_fishNum(), temperature)
+            else: 
+                grid[7-i][j] = Entry(0, temperature)
+    return grid
 
 '''Direction can be u,d,r,l
     the starting position (x,y) encoded from (0,0) being the top left corner'''
@@ -85,14 +73,12 @@ def move_fish(grid, x, y, direction, numbers):
         
         new_entry.moveIn(numbers)
 
-    
 def migration(grid):
     new_grid = []
     for row in range(len(grid)): 
         new_grid.append([])
         for cell in range(len(grid[0])): 
             new_grid[row].append(Entry(grid[row][cell].get_fishNum(),grid[row][cell].get_temp()))
-
 
     for row in range(len(grid)): 
         for cell in range(len(grid[0])): 
@@ -124,8 +110,7 @@ def migration(grid):
                     if cur_diff < cur_best_diff: 
                         cur_best_diff = cur_diff 
                         best_direction = "r"
-                
-                
+        
                 # p = 0.5
                 # while h:
                 #     current_movement_direction = heapq.heappop(h)[1]
@@ -135,15 +120,15 @@ def migration(grid):
                 percentage = 0.5*abs(grid[row][cell].get_temp()-7.3)
                 
                 move_fish(new_grid,cell,row,best_direction,math.ceil(grid[row][cell].get_fishNum()*percentage))
-    # global global_grid
-    # global_grid = new_grid
-    # return new_grid            
+    global global_grid
+    global_grid = new_grid
+    return new_grid            
                 # print("grid:")
                 # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in grid]))
                 # print("new grid: ")
                 # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in new_grid]))
-    print('hhhhhhhhhhhhhh')
-    print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in new_grid]))
+    # print('hhhhhhhhhhhhhh')
+    # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in new_grid]))
     # print()
     # migration(new_grid, v_step-1,fish_percentage)
 
@@ -165,9 +150,6 @@ def move_with_velocity(grid):
         print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in global_grid]))
         print()
     
-
-
-
 def main():
     #Basic
     # dataset = datap.cell_info()
@@ -175,8 +157,14 @@ def main():
     # move_fish(grid, 3, 2, "u",2)
     print("Initial Stage: ")
     print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in fish_grid]))
+    fish_grid = migration(fish_grid)
     print()
-    migration(fish_grid)
+    for t in range(2,20):
+        fish_grid = update_temperature(fish_grid,t)
+        print("t=",t)
+        print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in fish_grid]))
+        fish_grid = migration(fish_grid)
+
     # move_with_velocity(fish_grid) 
 
     # for month in range(1,10): 
