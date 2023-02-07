@@ -49,27 +49,31 @@ def move_fish(grid, x, y, direction, numbers):
     if fishNum >= numbers:
         old_entry.moveOut(numbers)
         
-        match direction:
-            case "u":
-                if y<=0:
-                    print("Some fish moved out of bound!!!")
-                    return
-                new_entry = grid[y-1][x]
-            case "l":
-                if x<=0:
-                    print("Some fish moved out of bound!!!")
-                    return
-                new_entry = grid[y][x-1]
-            case "r":
-                if x>=len(grid[0])-1:
-                    print("Some fish moved out of bound!!!")
-                    return
-                new_entry = grid[y][x+1]
-            case "d":
-                if y>=len(grid)-1:
-                    print("Some fish moved out of bound!!!")
-                    return
-                new_entry = grid[y+1][x]
+        # match direction:
+        #     case "u":
+        if direction == "u":
+            if y<=0:
+                print("Some fish moved out of bound!!!")
+                return
+            new_entry = grid[y-1][x]
+        # case "l":
+        if direction == "l":
+            if x<=0:
+                print("Some fish moved out of bound!!!")
+                return
+            new_entry = grid[y][x-1]
+        # case "r":
+        if direction == "r":
+            if x>=len(grid[0])-1:
+                print("Some fish moved out of bound!!!")
+                return
+            new_entry = grid[y][x+1]
+        # case "d":
+        if direction == "d":
+            if y>=len(grid)-1:
+                print("Some fish moved out of bound!!!")
+                return
+            new_entry = grid[y+1][x]
         
         new_entry.moveIn(numbers)
 
@@ -117,7 +121,25 @@ def migration(grid):
                 #     fish_num = math.ceil(p*grid[row][cell].get_fishNum())
                 #     move_fish(new_grid,cell,row,current_movement_direction,fish_num)
                 #     p = p/2
-                percentage = 0.5*abs(grid[row][cell].get_temp()-7.5)
+
+                # percentage = 0.5*abs(grid[row][cell].get_temp()-7.5)
+                # V_max = 160 miles/month
+                # One degree of latitude equals approximately 69 miles
+                # One degree of longitude equals approximately 55 miles
+                temp_diff = abs(grid[row][cell].get_temp()-7.5)
+                V_max = 160
+                if best_direction == "u" or best_direction == "d":
+                    if temp_diff <= 2:
+                        velocity = 0.5 * temp_diff * 0.43125 * V_max
+                        percentage = velocity / 69
+                    else: 
+                        percentage = 1
+                else:
+                    if temp_diff <= 2:
+                        velocity = 0.5 * temp_diff * 0.34375 * V_max
+                        percentage = velocity / 55
+                    else: 
+                        percentage = 1
                 
                 move_fish(new_grid,cell,row,best_direction,math.ceil(grid[row][cell].get_fishNum()*percentage))
     global global_grid

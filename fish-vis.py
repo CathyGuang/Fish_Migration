@@ -27,6 +27,7 @@ cb.update_ticks()
 
 def updatefig(*args):
     global i
+    i = 0
     if (i<100):
         i += 1
     else:
