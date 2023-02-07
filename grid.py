@@ -82,30 +82,30 @@ def migration(grid):
 
     for row in range(len(grid)): 
         for cell in range(len(grid[0])): 
-            if grid[row][cell].get_temp() != 7.3 and grid[row][cell].get_fishNum() > 0:
+            if grid[row][cell].get_temp() != 7.5 and grid[row][cell].get_fishNum() > 0:
                 cur_best_diff = float('inf')
                 best_direction = None
                 h = []
                 if row-1 >=0: 
-                    cur_diff = abs(grid[row-1][cell].get_temp()-7.3)
+                    cur_diff = abs(grid[row-1][cell].get_temp()-7.5)
                     # heapq.heappush(h,(cur_diff,"u"))
                     if cur_diff < cur_best_diff:
                         cur_best_diff = cur_diff 
                         best_direction = "u"
                 if row+1 <=len(grid)-1: 
-                    cur_diff = abs(grid[row+1][cell].get_temp()-7.3)
+                    cur_diff = abs(grid[row+1][cell].get_temp()-7.5)
                     # heapq.heappush(h,(cur_diff,"d"))
                     if cur_diff < cur_best_diff: 
                         cur_best_diff = cur_diff 
                         best_direction = "d"
                 if cell-1 >=0: 
-                    cur_diff = abs(grid[row][cell-1].get_temp()-7.3)
+                    cur_diff = abs(grid[row][cell-1].get_temp()-7.5)
                     # heapq.heappush(h,(cur_diff,"l"))
                     if cur_diff < cur_best_diff: 
                         cur_best_diff = cur_diff 
                         best_direction = "l"
                 if cell+1 <= len(grid[0])-1: 
-                    cur_diff = abs(grid[row][cell+1].get_temp()-7.3)
+                    cur_diff = abs(grid[row][cell+1].get_temp()-7.5)
                     # heapq.heappush(h,(cur_diff,"r"))
                     if cur_diff < cur_best_diff: 
                         cur_best_diff = cur_diff 
@@ -117,59 +117,47 @@ def migration(grid):
                 #     fish_num = math.ceil(p*grid[row][cell].get_fishNum())
                 #     move_fish(new_grid,cell,row,current_movement_direction,fish_num)
                 #     p = p/2
-                percentage = 0.5*abs(grid[row][cell].get_temp()-7.3)
+                percentage = 0.5*abs(grid[row][cell].get_temp()-7.5)
                 
                 move_fish(new_grid,cell,row,best_direction,math.ceil(grid[row][cell].get_fishNum()*percentage))
     global global_grid
     global_grid = new_grid
-    return new_grid            
-                # print("grid:")
-                # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in grid]))
-                # print("new grid: ")
-                # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in new_grid]))
-    # print('hhhhhhhhhhhhhh')
-    # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in new_grid]))
-    # print()
-    # migration(new_grid, v_step-1,fish_percentage)
+    return new_grid   
 
-
-def move_with_velocity(grid):
-    global global_grid
-    global_grid = grid
-    # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in global_grid]))
-    for month in range(9):
-        # cur_grid = migration(cur_grid, v_step, fish_percentage)
-        # cur_grid = []
-        # for row in range(len(grid)): 
-        #     cur_grid.append([])
-        #     for cell in range(len(grid[0])): 
-        #         cur_grid[row].append(Entry(grid[row][cell].get_fishNum(),grid[row][cell].get_temp()))
-
-        migration(global_grid)
-        print("Current Month:", month)
-        print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in global_grid]))
-        print()
-    
-def main():
-    #Basic
-    # dataset = datap.cell_info()
+def build_vis_arr(t):
+    arr = []
+    grid = [[None for _ in range(11)] for _ in range(8)]
     fish_grid = initialize_grid_coded(1)
-    # move_fish(grid, 3, 2, "u",2)
-    print("Initial Stage: ")
-    print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in fish_grid]))
-    fish_grid = migration(fish_grid)
-    print()
-    for t in range(2,20):
+    for i in range(0,8):
+        for j in range(0,11):
+            grid[7 - i][j] = fish_grid[7 - i][j].get_fishNum()
+    print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in grid]))
+    arr.append(grid)
+
+    for t in range(2,t):
+        fish_grid = migration(fish_grid)
+        print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in fish_grid]))
         fish_grid = update_temperature(fish_grid,t)
         print("t=",t)
-        print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in fish_grid]))
-        fish_grid = migration(fish_grid)
+        for i in range(0,8):
+            for j in range(0,11):
+                grid[7 - i][j] = fish_grid[7 - i][j].get_fishNum()
+        arr.append(grid)
 
-    # move_with_velocity(fish_grid) 
+    return arr
 
-    # for month in range(1,10): 
-    #     temp_grid = initialize_grid_coded(month)
-    #     migration(temp_grid, fish_grid)
+def main():
+    build_vis_arr(20)
+    # fish_grid = initialize_grid_coded(1)
+    # print("Initial Stage: ")
+    # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in fish_grid]))
+    # fish_grid = migration(fish_grid)
+    # print()
+    # for t in range(2,20):
+    #     fish_grid = update_temperature(fish_grid,t)
+    #     print("t=",t)
+    #     print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in fish_grid]))
+    #     fish_grid = migration(fish_grid)
 
 if __name__ == "__main__":
     main()
