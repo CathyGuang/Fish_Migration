@@ -94,28 +94,33 @@ def migration(grid):
                 direction_list = []
                 if row-1 >=0: 
                     cur_diff = abs(grid[row-1][cell].get_temp()-7.5)
-                    if grid[row-1][cell].get_temp() != 0:
+                    # if grid[row-1][cell].get_temp() != 0:
+                    if not math.isnan(grid[row-1][cell].get_temp()):
+                        # print('ajhhahahhaha')
                         direction_list.append("u")
                     if cur_diff < cur_best_diff:
                         cur_best_diff = cur_diff 
                         best_direction = "u"
                 if row+1 <=len(grid)-1: 
                     cur_diff = abs(grid[row+1][cell].get_temp()-7.5)
-                    if grid[row+1][cell].get_temp() != 0:
+                    # if grid[row+1][cell].get_temp() != 0:
+                    if not math.isnan(grid[row+1][cell].get_temp()):
                         direction_list.append("d")
                     if cur_diff < cur_best_diff: 
                         cur_best_diff = cur_diff 
                         best_direction = "d"
                 if cell-1 >=0: 
                     cur_diff = abs(grid[row][cell-1].get_temp()-7.5)
-                    if grid[row][cell-1].get_temp() != 0:
+                    # if grid[row][cell-1].get_temp() != 0:
+                    if not math.isnan(grid[row][cell-1].get_temp()):
                         direction_list.append("l")
                     if cur_diff < cur_best_diff: 
                         cur_best_diff = cur_diff 
                         best_direction = "l"
                 if cell+1 <= len(grid[0])-1: 
                     cur_diff = abs(grid[row][cell+1].get_temp()-7.5)
-                    if grid[row][cell+1].get_temp() != 0:
+                    # if grid[row][cell+1].get_temp() != 0:
+                    if not math.isnan(grid[row][cell+1].get_temp()):
                         direction_list.append("r")
                     if cur_diff < cur_best_diff: 
                         cur_best_diff = cur_diff 
@@ -149,11 +154,17 @@ def migration(grid):
                     else: 
                         percentage = 1
                 
-                
-                move_fish(new_grid,cell,row,best_direction,math.ceil(grid[row][cell].get_fishNum()*percentage*0.8))
-                random_move = random.choice([direction for direction in direction_list if direction != best_direction])
-                if random_move: 
-                    move_fish(new_grid,cell,row,random_move,math.ceil(grid[row][cell].get_fishNum()*percentage*0.1))
+                cur_fish_num = grid[row][cell].get_fishNum()
+                move_fish(new_grid,cell,row,best_direction,math.ceil(cur_fish_num*percentage*0.8))
+                if len(direction_list) > 1: 
+                    random_move = random.choice([direction for direction in direction_list if direction != best_direction])
+                    move_fish(new_grid,cell,row,random_move,math.ceil(cur_fish_num*percentage*0.1))
+                elif len(direction_list) == 1: 
+                    move = direction_list[0]
+                    if move != best_direction:
+                        move_fish(new_grid,cell,row,move,math.ceil(cur_fish_num*percentage*0.8))
+                # print('random move: ', random_move, ' best move: ', best_direction)
+                    
     global global_grid
     global_grid = new_grid
     return new_grid   
