@@ -2,6 +2,7 @@ from entry import Entry
 import math
 import heapq
 import dataparse as datap
+import random
 
 '''
 Potential improvements:
@@ -90,27 +91,32 @@ def migration(grid):
                 cur_best_diff = float('inf')
                 best_direction = None
                 h = []
+                direction_list = []
                 if row-1 >=0: 
                     cur_diff = abs(grid[row-1][cell].get_temp()-7.5)
-                    # heapq.heappush(h,(cur_diff,"u"))
+                    if grid[row-1][cell].get_temp() != 0:
+                        direction_list.append("u")
                     if cur_diff < cur_best_diff:
                         cur_best_diff = cur_diff 
                         best_direction = "u"
                 if row+1 <=len(grid)-1: 
                     cur_diff = abs(grid[row+1][cell].get_temp()-7.5)
-                    # heapq.heappush(h,(cur_diff,"d"))
+                    if grid[row+1][cell].get_temp() != 0:
+                        direction_list.append("d")
                     if cur_diff < cur_best_diff: 
                         cur_best_diff = cur_diff 
                         best_direction = "d"
                 if cell-1 >=0: 
                     cur_diff = abs(grid[row][cell-1].get_temp()-7.5)
-                    # heapq.heappush(h,(cur_diff,"l"))
+                    if grid[row][cell-1].get_temp() != 0:
+                        direction_list.append("l")
                     if cur_diff < cur_best_diff: 
                         cur_best_diff = cur_diff 
                         best_direction = "l"
                 if cell+1 <= len(grid[0])-1: 
                     cur_diff = abs(grid[row][cell+1].get_temp()-7.5)
-                    # heapq.heappush(h,(cur_diff,"r"))
+                    if grid[row][cell+1].get_temp() != 0:
+                        direction_list.append("r")
                     if cur_diff < cur_best_diff: 
                         cur_best_diff = cur_diff 
                         best_direction = "r"
@@ -131,19 +137,23 @@ def migration(grid):
                 if best_direction == "u" or best_direction == "d":
                     if temp_diff <= 2:
                         # 0.43125 = distance of one degree of latitude / V_max
-                        velocity = 0.5 * temp_diff * 0.43125 * V_max
+                        velocity = 0.5 * temp_diff * 0.43125 * V_max /2
                         percentage = velocity / 69
                     else: 
                         percentage = 1
                 else:
                     if temp_diff <= 2:
                         # 0.34375 = distance of one degree of longitude / V_max
-                        velocity = 0.5 * temp_diff * 0.34375 * V_max
+                        velocity = 0.5 * temp_diff * 0.34375 * V_max /2
                         percentage = velocity / 55
                     else: 
                         percentage = 1
                 
-                move_fish(new_grid,cell,row,best_direction,math.ceil(grid[row][cell].get_fishNum()*percentage))
+                
+                move_fish(new_grid,cell,row,best_direction,math.ceil(grid[row][cell].get_fishNum()*percentage*0.8))
+                random_move = random.choice([direction for direction in direction_list if direction != best_direction])
+                if random_move: 
+                    move_fish(new_grid,cell,row,random_move,math.ceil(grid[row][cell].get_fishNum()*percentage*0.1))
     global global_grid
     global_grid = new_grid
     return new_grid   

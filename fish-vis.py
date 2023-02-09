@@ -14,12 +14,12 @@ ax = fig.add_subplot()
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")
 
-arr = g.build_vis_arr(100)
+arr = g.build_vis_arr(24)
 
 arr = np.array(arr)
 print(arr[10])
 
-im = plt.imshow(arr[0], animated=True)
+im = plt.imshow(arr[0], animated=True, cmap=plt.cm.get_cmap('Blues'))
 cb = fig.colorbar(im)
 tick_locator = ticker.MaxNLocator(nbins = 5)
 cb.locator = tick_locator
@@ -28,7 +28,7 @@ i = 0
 
 def updatefig(*args):
     global i
-    if (i<100):
+    if (i<25):
         i += 1
     else:
         i=0
