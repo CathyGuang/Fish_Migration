@@ -15,7 +15,6 @@ coordrange = []
 for i in range(-11, 1):
     for j in range(55, 63):
         coordrange.append((i,j))
-        
 
 def tempcalc (temprange: tuple, dataset):
     long = temprange[0]
@@ -39,6 +38,8 @@ def tempcalc (temprange: tuple, dataset):
                     temptracker = np.append(temptracker, columnsum/count)        
                 continue
             temptracker = np.append(temptracker, range[[col]].mean(numeric_only = True)[0])
+        elif (col >= long + 1.05):
+            break
     return np.mean(temptracker)
 
 cordavgtemp = {}
@@ -60,20 +61,16 @@ for pair in coordrange:
     newpair = (pair[0] + 11, pair[1] - 55)
     cordphitemp[newpair] = avg
 
-
-
 modelparams = {}
 for pair in coordrange:
     newpair =(pair[0] + 11, pair[1] - 55)
     modelparams[newpair] = (cordavgtemp[newpair], cordamptemp[newpair], cordphitemp[newpair])
-    # print(newpair, modelparams[newpair])
-        
+    print("old pair: ", pair, " new pair: ", newpair, modelparams[newpair])
 
 
 def predictedtemp(pair, time):
     y = 0.0018418*time -0.5415 + cordavgtemp[pair] + cordamptemp[pair] * np.sin(2*np.pi/12*time + cordphitemp[pair])
     return y
-
 
 
 
