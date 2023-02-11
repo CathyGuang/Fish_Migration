@@ -90,7 +90,7 @@ def back_migration(grid):
             if grid[row][cell].get_fishNum() > 0:
                 if row +1 <= 7: 
                     if not math.isnan(grid[row+1][cell].get_temp()):
-                        move_fish(new_grid,cell,row,"d",math.ceil(grid[row][cell].get_fishNum()*0.5))
+                        move_fish(new_grid,cell,row,"d",math.ceil(grid[row][cell].get_fishNum()*0.4))
 
     global global_grid
     global_grid = new_grid
@@ -195,18 +195,55 @@ def build_vis_arr(t):
     for i in range(0,8):
         for j in range(0,12):
             grid[7 - i][j] = fish_grid[7 - i][j].get_fishNum()
-    print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in grid]))
+    # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in grid]))
     arr.append(grid)
     # print(arr)
-
+    sum_0 = 0
+    sum_10 = 0
+    sum_20 = 0
+    sum_30 = 0
+    sum_40 = 0
+    sum_50 = 0
     for k in range(2,t):
+        # print('Current month k:', k)
         if k%12 in range(4, 10): 
             fish_grid = migration(fish_grid)
         else: 
             fish_grid = back_migration(fish_grid)
-        print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in fish_grid]))
+            if k in range(9, 15): 
+                # sum_0 += fish_grid[4][6].get_fishNum() + fish_grid[4][7].get_fishNum() + fish_grid[3][6].get_fishNum() + fish_grid[3][7].get_fishNum()
+                # sum_0 += fish_grid[4][9].get_fishNum() + fish_grid[4][10].get_fishNum() + fish_grid[5][9].get_fishNum() + fish_grid[5][10].get_fishNum()
+                # sum_0 += fish_grid[6][9].get_fishNum() + fish_grid[6][10].get_fishNum() + fish_grid[7][10].get_fishNum()
+                sum_0 += fish_grid[4][8].get_fishNum() + fish_grid[5][8].get_fishNum() + fish_grid[5][9].get_fishNum()
+            if k in range(117, 123): 
+                # sum_10 += fish_grid[4][6].get_fishNum() + fish_grid[4][7].get_fishNum() + fish_grid[3][6].get_fishNum() + fish_grid[3][7].get_fishNum()
+                # sum_10 += fish_grid[4][9].get_fishNum() + fish_grid[4][10].get_fishNum() + fish_grid[5][9].get_fishNum() + fish_grid[5][10].get_fishNum()
+                # sum_10 += fish_grid[6][9].get_fishNum() + fish_grid[6][10].get_fishNum() + fish_grid[7][10].get_fishNum()
+                sum_10 += fish_grid[4][8].get_fishNum() + fish_grid[5][8].get_fishNum() + fish_grid[5][9].get_fishNum()
+            if k in range(237, 243): 
+                # sum_20 += fish_grid[4][6].get_fishNum() + fish_grid[4][7].get_fishNum() + fish_grid[3][6].get_fishNum() + fish_grid[3][7].get_fishNum()
+                # sum_20 += fish_grid[4][9].get_fishNum() + fish_grid[4][10].get_fishNum() + fish_grid[5][9].get_fishNum() + fish_grid[5][10].get_fishNum()
+                # sum_20 += fish_grid[6][9].get_fishNum() + fish_grid[6][10].get_fishNum() + fish_grid[7][10].get_fishNum()
+                sum_20 += fish_grid[4][8].get_fishNum() + fish_grid[5][8].get_fishNum() + fish_grid[5][9].get_fishNum()
+            if k in range(357, 363): 
+                # sum_30 += fish_grid[4][6].get_fishNum() + fish_grid[4][7].get_fishNum() + fish_grid[3][6].get_fishNum() + fish_grid[3][7].get_fishNum()
+                # sum_30 += fish_grid[4][9].get_fishNum() + fish_grid[4][10].get_fishNum() + fish_grid[5][9].get_fishNum() + fish_grid[5][10].get_fishNum()
+                # sum_30 += fish_grid[6][9].get_fishNum() + fish_grid[6][10].get_fishNum() + fish_grid[7][10].get_fishNum()
+                sum_30 += fish_grid[4][8].get_fishNum() + fish_grid[5][8].get_fishNum() + fish_grid[5][9].get_fishNum()
+            if k in range(477, 483): 
+                # sum_40 += fish_grid[4][6].get_fishNum() + fish_grid[4][7].get_fishNum() + fish_grid[3][6].get_fishNum() + fish_grid[3][7].get_fishNum()
+                # sum_40 += fish_grid[4][9].get_fishNum() + fish_grid[4][10].get_fishNum() + fish_grid[5][9].get_fishNum() + fish_grid[5][10].get_fishNum()
+                # sum_40 += fish_grid[6][9].get_fishNum() + fish_grid[6][10].get_fishNum() + fish_grid[7][10].get_fishNum()
+                sum_40 += fish_grid[4][8].get_fishNum() + fish_grid[5][8].get_fishNum() + fish_grid[5][9].get_fishNum()
+            if k in range(597, 603): 
+                # sum_50 += fish_grid[4][6].get_fishNum() + fish_grid[4][7].get_fishNum() + fish_grid[3][6].get_fishNum() + fish_grid[3][7].get_fishNum()
+                # sum_50 += fish_grid[4][9].get_fishNum() + fish_grid[4][10].get_fishNum() + fish_grid[5][9].get_fishNum() + fish_grid[5][10].get_fishNum()
+                # sum_50 += fish_grid[6][9].get_fishNum() + fish_grid[6][10].get_fishNum() + fish_grid[7][10].get_fishNum()
+                sum_50 += fish_grid[4][8].get_fishNum() + fish_grid[5][8].get_fishNum() + fish_grid[5][9].get_fishNum()
+            
+        # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in fish_grid]))
         fish_grid = update_temperature(fish_grid,k)
-        print("t=",k)
+        # print("t=",k)
         grid = [[None for _ in range(12)] for _ in range(8)]
         for i in range(0,8):
             for j in range(0,12):
@@ -216,10 +253,17 @@ def build_vis_arr(t):
         # print(arr)
     #     # 
     # print(arr)
+    print('Fishery 5:')
+    print('Year 0 sum: ', sum_0/6)
+    print('Year 10 sum: ', sum_10/6)
+    print('Year 20 sum: ', sum_20/6)
+    print('Year 30 sum: ', sum_30/6)
+    print('Year 40 sum: ', sum_40/6)
+    print('Year 50 sum: ', sum_50/6)
     return arr
 
 def main():
-    build_vis_arr(20)
+    build_vis_arr(604)
     # fish_grid = initialize_grid_coded(1)
     # print("Initial Stage: ")
     # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in fish_grid]))

@@ -14,7 +14,7 @@ ax = fig.add_subplot()
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")
 
-arr = g.build_vis_arr(60)
+arr = g.build_vis_arr(601)
 
 arr = np.array(arr)
 
@@ -27,8 +27,8 @@ i = 0
 
 def updatefig(*args):
     global i
-    print(i)
-    if (i<61):
+    # print(i)
+    if (i<601):
         i += 1
     else:
         i=0
