@@ -17,13 +17,11 @@ plt.ylabel("Latitude")
 arr = g.build_vis_arr(60)
 
 arr = np.array(arr)
-print(arr)
+print(arr[0])
 
 im = plt.imshow(arr[0], animated=True, cmap=plt.cm.get_cmap('BuPu'))
 cb = fig.colorbar(im)
-tick_locator = ticker.MaxNLocator(nbins = 5)
-cb.locator = tick_locator
-cb.update_ticks()
+
 i = 0
 
 def updatefig(*args):
@@ -32,12 +30,10 @@ def updatefig(*args):
         i += 1
     else:
         i=0
-    vmin = np.nanmin(arr[i])
-    vmax = np.nanmax(arr[i])
 
     im.set_array(arr[i])
-    if i % 6 == 0:
-        im.set_clim(vmin, vmax)
+  
+    im.set_clim(0, 800)
     
     #norm = mpl.colors.Normalize(vmin = np.min(arr[i]), vmax = np.max(arr[i]))
     if i > 12:
