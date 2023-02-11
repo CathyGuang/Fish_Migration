@@ -17,7 +17,7 @@ global_grid = []
 
 '''Initialize grid with time = 1.'''
 def initialize_grid_coded(t):
-    grid=[[None for _ in range(11)] for _ in range(8)]
+    grid=[[None for _ in range(12)] for _ in range(8)]
     for i in range(len(grid)):
         for j in range(len(grid[0])):
             temperature = datap.predictedtemp((j,i), t)
@@ -29,7 +29,7 @@ def initialize_grid_coded(t):
 
 '''This function updates temperatures in the grid given a time t.'''
 def update_temperature(old_grid,t):
-    grid=[[None for _ in range(11)] for _ in range(8)]
+    grid=[[None for _ in range(12)] for _ in range(8)]
     for i in range(len(grid)):
         for j in range(len(grid[0])):
             temperature = datap.predictedtemp((j,i), t)
@@ -77,6 +77,25 @@ def move_fish(grid, x, y, direction, numbers):
             new_entry = grid[y+1][x]
         
         new_entry.moveIn(numbers)
+
+def back_migration(grid): 
+    new_grid = [] 
+    for row in range(len(grid)): 
+        new_grid.append([])
+        for cell in range(len(grid[0])): 
+            new_grid[row].append(Entry(grid[row][cell].get_fishNum(),grid[row][cell].get_temp()))
+
+    for row in range(len(grid)): 
+        for cell in range(len(grid[0])): 
+            if grid[row][cell].get_fishNum() > 0:
+                if row +1 <= 7: 
+                    if not math.isnan(grid[row+1][cell].get_temp()):
+                        move_fish(new_grid,cell,row,"d",math.ceil(grid[row][cell].get_fishNum()*0.5))
+
+    global global_grid
+    global_grid = new_grid
+    return new_grid 
+    
 
 def migration(grid):
     new_grid = []
@@ -171,27 +190,30 @@ def migration(grid):
 
 def build_vis_arr(t):
     arr = []
-    grid = [[None for _ in range(11)] for _ in range(8)]
+    grid = [[None for _ in range(12)] for _ in range(8)]
     fish_grid = initialize_grid_coded(1)
     for i in range(0,8):
-        for j in range(0,11):
+        for j in range(0,12):
             grid[7 - i][j] = fish_grid[7 - i][j].get_fishNum()
     print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in grid]))
     arr.append(grid)
-    print(arr)
+    # print(arr)
 
     for k in range(2,t):
-        fish_grid = migration(fish_grid)
-    #     # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in fish_grid]))
+        if k%12 in range(4, 10): 
+            fish_grid = migration(fish_grid)
+        else: 
+            fish_grid = back_migration(fish_grid)
+        print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in fish_grid]))
         fish_grid = update_temperature(fish_grid,k)
         print("t=",k)
-        grid = [[None for _ in range(11)] for _ in range(8)]
+        grid = [[None for _ in range(12)] for _ in range(8)]
         for i in range(0,8):
-            for j in range(0,11):
+            for j in range(0,12):
                 grid[7 - i][j] = fish_grid[7 - i][j].get_fishNum()
     #     print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in grid]))
         arr.append(grid)
-        print(arr)
+        # print(arr)
     #     # 
     # print(arr)
     return arr

@@ -17,15 +17,17 @@ plt.ylabel("Latitude")
 arr = g.build_vis_arr(60)
 
 arr = np.array(arr)
-print(arr[0])
 
 im = plt.imshow(arr[0], animated=True, cmap=plt.cm.get_cmap('BuPu'))
+
+im.set_clim(0, 800)
 cb = fig.colorbar(im)
 
 i = 0
 
 def updatefig(*args):
     global i
+    print(i)
     if (i<61):
         i += 1
     else:

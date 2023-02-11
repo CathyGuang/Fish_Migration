@@ -65,7 +65,6 @@ modelparams = {}
 for pair in coordrange:
     newpair =(pair[0] + 11, pair[1] - 55)
     modelparams[newpair] = (cordavgtemp[newpair], cordamptemp[newpair], cordphitemp[newpair])
-    print("old pair: ", pair, " new pair: ", newpair, modelparams[newpair])
 
 
 def predictedtemp(pair, time):
