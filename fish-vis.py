@@ -17,7 +17,7 @@ plt.ylabel("Latitude")
 arr = g.build_vis_arr(60)
 
 arr = np.array(arr)
-print(arr[10])
+print(arr)
 
 im = plt.imshow(arr[0], animated=True, cmap=plt.cm.get_cmap('BuPu'))
 cb = fig.colorbar(im)

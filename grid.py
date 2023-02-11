@@ -171,24 +171,28 @@ def migration(grid):
 
 def build_vis_arr(t):
     arr = []
-    grid = [[None for _ in range(11)] for _ in range(8)]
+    grid = [[None for _ in range(12)] for _ in range(8)]
     fish_grid = initialize_grid_coded(1)
     for i in range(0,8):
         for j in range(0,11):
             grid[7 - i][j] = fish_grid[7 - i][j].get_fishNum()
     print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in grid]))
     arr.append(grid)
+    print(arr)
 
-    for t in range(2,t):
+    for k in range(2,t):
         fish_grid = migration(fish_grid)
-        print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in fish_grid]))
-        fish_grid = update_temperature(fish_grid,t)
-        print("t=",t)
+        # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in fish_grid]))
+        fish_grid = update_temperature(fish_grid,k)
+        print("t=",k)
         for i in range(0,8):
             for j in range(0,11):
                 grid[7 - i][j] = fish_grid[7 - i][j].get_fishNum()
-        arr.append(grid)
-
+        print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in grid]))
+        arr.append(fish_grid)
+        print(arr)
+    #     # 
+    # print(arr)
     return arr
 
 def main():
